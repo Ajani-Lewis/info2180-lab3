@@ -2,9 +2,10 @@ window.onload = function(){
 
     let status = document.getElementById("status");
     let board = document.getElementById("board").getElementsByTagName("div");
+    let btn =  document.querySelector(".btn");
     let gameState = [];
     let turn = ["X","O"];
-    const winCon = [['1','2','3'],['4','5','6'],['7','8','9'],['1','4','7'],['2','5','8'],['3','6','9'],['1','5','9'],['2','5','7']];
+    const winCon = [['1','2','3'],['4','5','6'],['7','8','9'],['1','4','7'],['2','5','8'],['3','6','9'],['1','5','9'],['3','5','7']];
 
     for(x=0;x<board.length;x++){
         board[x].setAttribute("id",x+1);
@@ -15,17 +16,39 @@ window.onload = function(){
         board[x].innerHTML = "";
     }
 
+    btn.addEventListener("click",renew);
+
+    function renew(e){
+        for(x=0;x<board.length;x++){
+            board[x].classList.remove("X");
+            board[x].classList.remove("O");
+            board[x].innerHTML = "";
+            board[x].addEventListener("click",boxClicked,{once:true});
+        }
+        gameState = [];
+        turn = ["X","O"];
+        status.innerHTML = "Move your mouse over a square and click to play an X or an O.";
+        status.classList.remove("you-won");
+    }
+
     function boxClicked(e){
-        //console.log(e.target.id);
         e.target.innerHTML=turn[0];
         e.target.classList.add(turn[0]);
         gameState.push([e.target.id,turn[0]]);
         console.log(gameState);
         nextTurn();
         console.log(checkWin());
-        if(checkWin()!=-1){
+        if(checkWin()!=-1){ 
             status.classList.add("you-won")
             status.innerHTML = ("Congratulations! "+checkWin()+" is the Winner!");
+
+            for(x=0;x<board.length;x++){
+                if(board[x].innerHTML==""){
+                    board[x].removeEventListener("click",boxClicked,{once:true});
+                }
+            }
+        }else if(gameState.length==9){
+            status.innerHTML = "Game Ended In A Draw";
         }
 
     }
@@ -74,7 +97,6 @@ window.onload = function(){
         }
         return false
     }
-    
-    
 
+    
 };
