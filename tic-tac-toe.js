@@ -11,6 +11,8 @@ window.onload = function(){
         board[x].setAttribute("id",x+1);
         board[x].setAttribute("class","square");
         board[x].addEventListener("click",boxClicked);
+        board[x].addEventListener("mouseover",boxHover);
+        board[x].addEventListener("mouseout",boxOut);
     }
 
     function boxClicked(e){
@@ -20,6 +22,14 @@ window.onload = function(){
         gameState.push([e.target.id,turn[0]]);
         console.log(gameState);
         nextTurn();
+    }
+
+    function boxHover(e){
+        e.target.classList.add("hover");
+    }
+
+    function boxOut(e){
+        e.target.classList.remove("hover")
     }
 
     function nextTurn(){
